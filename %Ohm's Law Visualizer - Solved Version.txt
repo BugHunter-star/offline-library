@@ -1,0 +1,53 @@
+%Ohm's Law Visualizer - Solved Version
+% Demonstrates V = IR relationship for different resistances
+
+% Define resistances (default values)
+R_list = [1, 10, 100]; % Ohms
+
+% Current range: 0 to 2 Amperes (200 points)
+I = linspace(0, 2, 200); 
+
+% Create figure
+figure('Name', 'Ohm''s Law Demonstration', 'Color', 'white');
+hold on;
+
+% Colors for different resistance plots
+colors = ['b', 'r', 'g', 'm', 'c']; 
+
+% Plot V-I relationship for each resistance
+for k = 1:length(R_list)
+    V = I .* R_list(k); % V = IR
+    plot(I, V, 'LineWidth', 2, 'Color', colors(k), 'DisplayName', sprintf('R = %d Ω', R_list(k)));
+end
+
+% Format plot
+xlabel('Current (I) [A]', 'FontWeight', 'bold');
+ylabel('Voltage (V) [V]', 'FontWeight', 'bold');
+title('Ohm''s Law: Voltage vs. Current', 'FontSize', 12);
+legend('Location', 'northwest');
+grid on;
+box on;
+hold off;
+Generated Plots (Sample Outputs)
+Case 1: Default Resistances [1Ω, 10Ω, 100Ω]
+Ohm's Law Plot
+(Linear relationships with slopes = resistance values)
+Case 2: Custom Resistances [2Ω, 50Ω, 200Ω]
+Custom Resistances
+(Higher resistances produce steeper slopes)
+Key Observations from the Plots
+Linear Relationship: All curves are straight lines passing through the origin (V ∝ I).
+Slope = Resistance:
+1Ω resistor: Slope = 1 (45° line)
+10Ω resistor: Slope = 10 (steeper)
+100Ω resistor: Slope = 100 (steepest)
+Ohm's Law Validation: The plots confirm , where voltage increases linearly with current for a fixed resistance.
+How to Run This Code
+Copy the MATLAB code above.
+Paste it into the MATLAB editor and run (or use the command window).
+To test custom resistances, modify the R_list array (e.g., R_list = [2, 50, 200];).
+Expected Output Table (Numerical Verification)
+Current (A)	V (R=1Ω)	V (R=10Ω)	V (R=100Ω)
+0.5	0.5 V	5 V	50 V
+1.0	1.0 V	10 V	100 V
+1.5	1.5 V	15 V	150 V
