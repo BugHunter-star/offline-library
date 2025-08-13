@@ -16,6 +16,20 @@ CATEGORIES = ["Science", "Technology", "Mathematics", "Literature", "Others"]
 library = []
 online_search_results = []
 
+LIBRARY_FILE = "library.json"
+
+def load_library():
+    global library
+    if os.path.exists(LIBRARY_FILE):
+        with open(LIBRARY_FILE, "r", encoding="utf-8") as f:
+            library = json.load(f)
+    else:
+        library = []
+
+def save_library():
+    with open(LIBRARY_FILE, "w", encoding="utf-8") as f:
+        json.dump(library, f, indent=2)
+
 def search_books_online():
     """Search for books online using Open Library API"""
     search_term = search_entry.get().strip()
@@ -115,7 +129,7 @@ def download_selected_book():
                 "category": category,
                 "author": book['author']
             })
-            
+            save_library()
             update_list()
             status_label.config(text="✅ Book downloaded successfully!", fg='#27ae60')
             messagebox.showinfo("Success", f"Book '{book['title']}' downloaded and added to your library!")
@@ -143,6 +157,7 @@ def add_local_book():
         dest_path = os.path.join(BOOK_FOLDER, f"{title}.pdf")
         shutil.copy(filepath, dest_path)
         library.append({"title": title, "path": dest_path, "category": category})
+        save_library()
         update_list()
         messagebox.showinfo("Success", f"Book '{title}' added to your library.")
 
@@ -163,7 +178,11 @@ def open_book(event):
     selected = book_list.curselection()
     if selected:
         index = selected[0]
-        os.system(f"xdg-open '{library[index]['path']}'")
+        path = library[index]['path']
+        if os.name == 'nt':  # Windows
+            os.startfile(path)
+        else:  # Linux/Mac
+            os.system(f"xdg-open '{path}'")
 
 def clear_search():
     """Clear search field and show all books"""
@@ -315,6 +334,9 @@ instructions.pack(pady=(10, 0))
 
 # Bind Enter key to search
 search_entry.bind('<Return>', lambda e: search_books_online())
+
+# Load library at startup
+load_library()
 
 # Initialize the list
 update_list()
